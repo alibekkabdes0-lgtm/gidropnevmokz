@@ -806,14 +806,6 @@ export default function App() {
       {/* Content */}
       <div style={{ padding: "16px 14px", maxWidth: 640, margin: "0 auto" }}>
         <Page />
-        <div style={{
-          marginTop: 24, padding: "12px 16px", background: "rgba(255,255,255,0.02)",
-          borderRadius: 10, border: "1px solid rgba(255,255,255,0.04)",
-          fontSize: 10, color: "#475569", lineHeight: 1.5, textAlign: "center",
-        }}>
-          ЛС-ГС-2025 • 6В07119 «Технологические машины и оборудование» •
-          АО «КазУТБ им. К. Кулажанова»
-        </div>
       </div>
     </div>
   );
