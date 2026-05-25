@@ -9,7 +9,7 @@ function Card({ children, title, accent = "#2563eb", collapsed: initCollapsed })
   const [open, setOpen] = useState(!initCollapsed);
   return (
     <div style={{
-      background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)",
+      background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.13)",
       borderRadius: 16, padding: open ? "24px 28px" : "16px 28px", marginBottom: 16,
       position: "relative", overflow: "hidden", transition: "padding 0.3s",
     }}>
@@ -36,7 +36,7 @@ function Input({ label, value, onChange, unit, hint }) {
       <label style={{ display: "block", fontSize: 11, color: "#94a3b8", marginBottom: 4, fontWeight: 500 }}>{label}</label>
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
         <input type="number" value={value} onChange={e => onChange(e.target.value)} style={{
-          flex: 1, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)",
+          flex: 1, background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.18)",
           borderRadius: 8, padding: "9px 12px", color: "#e2e8f0", fontSize: 14, outline: "none", fontFamily: MONO,
         }} />
         {unit && <span style={{ fontSize: 11, color: "#64748b", minWidth: 36, fontWeight: 600 }}>{unit}</span>}
@@ -48,7 +48,7 @@ function Input({ label, value, onChange, unit, hint }) {
 
 function Result({ label, value, unit, big }) {
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
       <span style={{ fontSize: 12, color: "#94a3b8", maxWidth: "55%" }}>{label}</span>
       <span style={{ fontFamily: MONO, fontSize: big ? 20 : 15, fontWeight: big ? 700 : 500, color: big ? "#38bdf8" : "#e2e8f0" }}>
         {typeof value === "number" ? (Number.isFinite(value) ? value.toFixed(value < 0.01 ? 4 : 2) : "—") : value}
@@ -99,7 +99,7 @@ function ComponentTag({ name, value, color = "#2563eb" }) {
 
 function HydroScheme() {
   return (
-    <svg viewBox="0 0 900 420" style={{ width: "100%", borderRadius: 12, background: "#0a0f1e" }}>
+    <svg viewBox="0 0 900 420" style={{ width: "100%", borderRadius: 12, background: "#141c2e" }}>
       <defs>
         <marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#3b82f6" /></marker>
         <marker id="ahr" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto"><path d="M8,0 L0,3 L8,6" fill="#ef4444" /></marker>
@@ -208,7 +208,7 @@ function HydroScheme() {
 
 function PneuScheme() {
   return (
-    <svg viewBox="0 0 900 420" style={{ width: "100%", borderRadius: 12, background: "#051008" }}>
+    <svg viewBox="0 0 900 420" style={{ width: "100%", borderRadius: 12, background: "#121f18" }}>
       <defs>
         <marker id="ap" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#22c55e" /></marker>
       </defs>
@@ -313,10 +313,10 @@ function PneuScheme() {
 
 function PLCScheme() {
   return (
-    <svg viewBox="0 0 900 500" style={{ width: "100%", borderRadius: 12, background: "#0c0a14" }}>
+    <svg viewBox="0 0 900 500" style={{ width: "100%", borderRadius: 12, background: "#1c1a2e" }}>
       <text x="450" y="22" textAnchor="middle" fill="#64748b" fontSize="11" fontWeight="600">БЛОК-СХЕМА СИСТЕМЫ УПРАВЛЕНИЯ (ПЛК)</text>
       {/* PLC Center */}
-      <rect x="300" y="60" width="300" height="200" rx="10" fill="#1e1b3a" stroke="#8b5cf6" strokeWidth="2"/>
+      <rect x="300" y="60" width="300" height="200" rx="10" fill="#2a2648" stroke="#8b5cf6" strokeWidth="2"/>
       <text x="450" y="85" textAnchor="middle" fill="#8b5cf6" fontSize="11" fontWeight="700">ПЛК Siemens S7-1200</text>
       <text x="450" y="100" textAnchor="middle" fill="#94a3b8" fontSize="9">CPU 1212C | 8 DI / 6 DO / 2 AI + SM 1231</text>
       <text x="450" y="125" textAnchor="middle" fill="#a78bfa" fontSize="9" fontWeight="600">Ввод аналоговых сигналов (AI)</text>
@@ -726,8 +726,8 @@ function CalcPage() {
       <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 16 }}>
         {CALC_TABS.map(t => (
           <button key={t.id} onClick={() => setCt(t.id)} style={{
-            background: ct===t.id ? "rgba(56,189,248,0.2)" : "rgba(255,255,255,0.04)",
-            border: ct===t.id ? "1px solid rgba(56,189,248,0.4)" : "1px solid rgba(255,255,255,0.08)",
+            background: ct===t.id ? "rgba(56,189,248,0.2)" : "rgba(255,255,255,0.08)",
+            border: ct===t.id ? "1px solid rgba(56,189,248,0.4)" : "1px solid rgba(255,255,255,0.13)",
             borderRadius: 8, padding: "7px 12px", color: ct===t.id ? "#38bdf8" : "#94a3b8",
             fontSize: 11, fontWeight: 600, cursor: "pointer",
           }}>{t.label}</button>
@@ -762,15 +762,15 @@ export default function App() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "linear-gradient(160deg, #0c1222, #111827, #0f172a)",
+      background: "linear-gradient(160deg, #1a2740, #2a3548, #243044)",
       color: "#e2e8f0", fontFamily: FONT,
     }}>
       <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 
       {/* Header */}
       <div style={{
-        background: "linear-gradient(135deg, rgba(37,99,235,0.12), rgba(22,163,106,0.08))",
-        borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "18px 16px", textAlign: "center",
+        background: "linear-gradient(135deg, rgba(37,99,235,0.18), rgba(22,163,106,0.12))",
+        borderBottom: "1px solid rgba(255,255,255,0.10)", padding: "18px 16px", textAlign: "center",
       }}>
         <div style={{ fontSize: 10, letterSpacing: "0.15em", color: "#64748b", textTransform: "uppercase" }}>
           Лабораторный стенд • Гидравлические и пневматические системы
@@ -787,14 +787,14 @@ export default function App() {
       {/* Navigation */}
       <div style={{
         display: "flex", gap: 4, padding: "10px 12px", justifyContent: "center",
-        borderBottom: "1px solid rgba(255,255,255,0.05)", flexWrap: "wrap",
+        borderBottom: "1px solid rgba(255,255,255,0.09)", flexWrap: "wrap",
       }}>
         {MAIN_TABS.map(t => (
           <button key={t.id} onClick={() => setTab(t.id)} style={{
             background: tab === t.id
               ? "linear-gradient(135deg, rgba(37,99,235,0.25), rgba(56,189,248,0.15))"
-              : "rgba(255,255,255,0.03)",
-            border: tab === t.id ? "1px solid rgba(56,189,248,0.3)" : "1px solid rgba(255,255,255,0.06)",
+              : "rgba(255,255,255,0.07)",
+            border: tab === t.id ? "1px solid rgba(56,189,248,0.3)" : "1px solid rgba(255,255,255,0.10)",
             borderRadius: 10, padding: "8px 14px", color: tab === t.id ? "#38bdf8" : "#94a3b8",
             fontSize: 12, fontWeight: 600, cursor: "pointer", transition: "all 0.2s",
           }}>
