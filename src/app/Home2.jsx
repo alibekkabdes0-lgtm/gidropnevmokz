@@ -5,13 +5,35 @@ import { useState, useEffect, useRef } from "react";
 const FONT = "'Segoe UI', 'SF Pro Text', sans-serif";
 const MONO = "'JetBrains Mono', monospace";
 
+const THEME = {
+  bg: "linear-gradient(160deg, #f8fafc, #f1f5f9, #e8eef4)",
+  text: "#1e293b",
+  textSecondary: "#334155",
+  textMuted: "#64748b",
+  textHint: "#94a3b8",
+  border: "rgba(15,23,42,0.08)",
+  borderLight: "rgba(15,23,42,0.05)",
+  cardBg: "#ffffff",
+  cardBorder: "rgba(15,23,42,0.1)",
+  inputBg: "#ffffff",
+  inputBorder: "rgba(15,23,42,0.14)",
+  accentBright: "#0284c7",
+  svgBg: "#f0f4fa",
+  svgBgPneu: "#ecfdf5",
+  svgBgPlc: "#f5f3ff",
+  panelBg: "rgba(255,255,255,0.85)",
+  footerBg: "#f8fafc",
+  gaugeFill: "#ffffff",
+};
+
 function Card({ children, title, accent = "#2563eb", collapsed: initCollapsed }) {
   const [open, setOpen] = useState(!initCollapsed);
   return (
     <div style={{
-      background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)",
+      background: THEME.cardBg, border: `1px solid ${THEME.cardBorder}`,
       borderRadius: 16, padding: open ? "24px 28px" : "16px 28px", marginBottom: 16,
       position: "relative", overflow: "hidden", transition: "padding 0.3s",
+      boxShadow: "0 1px 3px rgba(15,23,42,0.06)",
     }}>
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, ${accent}, transparent)` }} />
       {title && (
@@ -33,26 +55,26 @@ function Card({ children, title, accent = "#2563eb", collapsed: initCollapsed })
 function Input({ label, value, onChange, unit, hint }) {
   return (
     <div style={{ marginBottom: 12 }}>
-      <label style={{ display: "block", fontSize: 11, color: "#94a3b8", marginBottom: 4, fontWeight: 500 }}>{label}</label>
+      <label style={{ display: "block", fontSize: 11, color: THEME.textMuted, marginBottom: 4, fontWeight: 500 }}>{label}</label>
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
         <input type="number" value={value} onChange={e => onChange(e.target.value)} style={{
-          flex: 1, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)",
-          borderRadius: 8, padding: "9px 12px", color: "#e2e8f0", fontSize: 14, outline: "none", fontFamily: MONO,
+          flex: 1, background: THEME.inputBg, border: `1px solid ${THEME.inputBorder}`,
+          borderRadius: 8, padding: "9px 12px", color: THEME.text, fontSize: 14, outline: "none", fontFamily: MONO,
         }} />
-        {unit && <span style={{ fontSize: 11, color: "#64748b", minWidth: 36, fontWeight: 600 }}>{unit}</span>}
+        {unit && <span style={{ fontSize: 11, color: THEME.textMuted, minWidth: 36, fontWeight: 600 }}>{unit}</span>}
       </div>
-      {hint && <span style={{ fontSize: 10, color: "#475569", marginTop: 2, display: "block" }}>{hint}</span>}
+      {hint && <span style={{ fontSize: 10, color: THEME.textHint, marginTop: 2, display: "block" }}>{hint}</span>}
     </div>
   );
 }
 
 function Result({ label, value, unit, big }) {
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-      <span style={{ fontSize: 12, color: "#94a3b8", maxWidth: "55%" }}>{label}</span>
-      <span style={{ fontFamily: MONO, fontSize: big ? 20 : 15, fontWeight: big ? 700 : 500, color: big ? "#38bdf8" : "#e2e8f0" }}>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "8px 0", borderBottom: `1px solid ${THEME.borderLight}` }}>
+      <span style={{ fontSize: 12, color: THEME.textMuted, maxWidth: "55%" }}>{label}</span>
+      <span style={{ fontFamily: MONO, fontSize: big ? 20 : 15, fontWeight: big ? 700 : 500, color: big ? THEME.accentBright : THEME.text }}>
         {typeof value === "number" ? (Number.isFinite(value) ? value.toFixed(value < 0.01 ? 4 : 2) : "—") : value}
-        {unit && <span style={{ fontSize: 10, color: "#64748b", marginLeft: 5 }}>{unit}</span>}
+        {unit && <span style={{ fontSize: 10, color: THEME.textMuted, marginLeft: 5 }}>{unit}</span>}
       </span>
     </div>
   );
@@ -62,7 +84,7 @@ function InfoBox({ children, color = "#2563eb" }) {
   return (
     <div style={{
       background: `${color}11`, border: `1px solid ${color}33`, borderRadius: 12,
-      padding: "14px 18px", marginBottom: 14, fontSize: 13, lineHeight: 1.7, color: "#cbd5e1",
+      padding: "14px 18px", marginBottom: 14, fontSize: 13, lineHeight: 1.7, color: THEME.textSecondary,
     }}>{children}</div>
   );
 }
@@ -75,8 +97,8 @@ function StepBox({ number, title, children }) {
         background: "linear-gradient(135deg, #2563eb, #38bdf8)", color: "#fff", fontWeight: 700, fontSize: 15,
       }}>{number}</div>
       <div style={{ flex: 1 }}>
-        <div style={{ fontWeight: 600, fontSize: 14, color: "#e2e8f0", marginBottom: 4 }}>{title}</div>
-        <div style={{ fontSize: 12, color: "#94a3b8", lineHeight: 1.6 }}>{children}</div>
+        <div style={{ fontWeight: 600, fontSize: 14, color: THEME.text, marginBottom: 4 }}>{title}</div>
+        <div style={{ fontSize: 12, color: THEME.textMuted, lineHeight: 1.6 }}>{children}</div>
       </div>
     </div>
   );
@@ -90,7 +112,7 @@ function ComponentTag({ name, value, color = "#2563eb" }) {
       fontSize: 11, fontWeight: 600, marginRight: 6, marginBottom: 6,
     }}>
       <span style={{ color }}>{name}</span>
-      <span style={{ color: "#94a3b8" }}>{value}</span>
+      <span style={{ color: THEME.textMuted }}>{value}</span>
     </div>
   );
 }
@@ -99,7 +121,7 @@ function ComponentTag({ name, value, color = "#2563eb" }) {
 
 function HydroScheme() {
   return (
-    <svg viewBox="0 0 900 420" style={{ width: "100%", borderRadius: 12, background: "#0a0f1e" }}>
+    <svg viewBox="0 0 900 420" style={{ width: "100%", borderRadius: 12, background: THEME.svgBg }}>
       <defs>
         <marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#3b82f6" /></marker>
         <marker id="ahr" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto"><path d="M8,0 L0,3 L8,6" fill="#ef4444" /></marker>
@@ -168,7 +190,7 @@ function HydroScheme() {
       <text x="560" y="174" textAnchor="middle" fill="#fbbf24" fontSize="9" fontWeight="600">М2</text>
       <line x1="560" y1="184" x2="560" y2="195" stroke="#fbbf24" strokeWidth="1"/>
       {/* Cylinder */}
-      <rect x="640" y="240" width="200" height="100" rx="6" fill="#1e3a5f33" stroke="#38bdf8" strokeWidth="2"/>
+      <rect x="640" y="240" width="200" height="100" rx="6" fill="#dbeafe66" stroke="#38bdf8" strokeWidth="2"/>
       <text x="740" y="278" textAnchor="middle" fill="#38bdf8" fontSize="11" fontWeight="700">ЦГ1</text>
       <text x="740" y="295" textAnchor="middle" fill="#94a3b8" fontSize="9">Гидроцилиндр двуст. действия</text>
       <text x="740" y="310" textAnchor="middle" fill="#64748b" fontSize="9">D=80 мм | d=40 мм | Ход=200 мм</text>
@@ -208,7 +230,7 @@ function HydroScheme() {
 
 function PneuScheme() {
   return (
-    <svg viewBox="0 0 900 420" style={{ width: "100%", borderRadius: 12, background: "#051008" }}>
+    <svg viewBox="0 0 900 420" style={{ width: "100%", borderRadius: 12, background: THEME.svgBgPneu }}>
       <defs>
         <marker id="ap" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#22c55e" /></marker>
       </defs>
@@ -280,7 +302,7 @@ function PneuScheme() {
       <line x1="540" y1="290" x2="540" y2="350" stroke="#22c55e" strokeWidth="1.5"/>
       <line x1="540" y1="350" x2="580" y2="350" stroke="#22c55e" strokeWidth="1.5"/>
       {/* Pneumo Cylinder */}
-      <rect x="580" y="310" width="230" height="90" rx="6" fill="#0a2e1233" stroke="#4ade80" strokeWidth="2"/>
+      <rect x="580" y="310" width="230" height="90" rx="6" fill="#dcfce766" stroke="#4ade80" strokeWidth="2"/>
       <text x="695" y="345" textAnchor="middle" fill="#4ade80" fontSize="11" fontWeight="700">Пневмоцилиндр двуст. действия</text>
       <text x="695" y="365" textAnchor="middle" fill="#94a3b8" fontSize="9">D=50 мм | d=20 мм | Ход=200 мм</text>
       <text x="695" y="380" textAnchor="middle" fill="#64748b" fontSize="9">Festo DSBC-50-200</text>
@@ -313,10 +335,10 @@ function PneuScheme() {
 
 function PLCScheme() {
   return (
-    <svg viewBox="0 0 900 500" style={{ width: "100%", borderRadius: 12, background: "#0c0a14" }}>
+    <svg viewBox="0 0 900 500" style={{ width: "100%", borderRadius: 12, background: THEME.svgBgPlc }}>
       <text x="450" y="22" textAnchor="middle" fill="#64748b" fontSize="11" fontWeight="600">БЛОК-СХЕМА СИСТЕМЫ УПРАВЛЕНИЯ (ПЛК)</text>
       {/* PLC Center */}
-      <rect x="300" y="60" width="300" height="200" rx="10" fill="#1e1b3a" stroke="#8b5cf6" strokeWidth="2"/>
+      <rect x="300" y="60" width="300" height="200" rx="10" fill="#ede9fe" stroke="#8b5cf6" strokeWidth="2"/>
       <text x="450" y="85" textAnchor="middle" fill="#8b5cf6" fontSize="11" fontWeight="700">ПЛК Siemens S7-1200</text>
       <text x="450" y="100" textAnchor="middle" fill="#94a3b8" fontSize="9">CPU 1212C | 8 DI / 6 DO / 2 AI + SM 1231</text>
       <text x="450" y="125" textAnchor="middle" fill="#a78bfa" fontSize="9" fontWeight="600">Ввод аналоговых сигналов (AI)</text>
@@ -391,9 +413,9 @@ function WelcomePage() {
   return (
     <div>
       <Card title="О программе" accent="#38bdf8">
-        <p style={{ fontSize: 13, lineHeight: 1.8, color: "#cbd5e1", margin: 0 }}>
+        <p style={{ fontSize: 13, lineHeight: 1.8, color: THEME.textSecondary, margin: 0 }}>
           Данная программа разработана для дистанционного обучения и проведения расчётов по лабораторному стенду
-          «Гидравлические и пневматические системы». Стенд включает гидравлический контур (насос НШ10Д, гидроцилиндр,
+          «Гидравлические и пневматические системы». Стенд включает гидравлический контур (насос НШ10Д, гидроцилиндр,З
           гидромотор, распределитель 4/3), пневматический контур (FRL-блок, пневмоцилиндр Festo DSBC-50-200,
           пневмомотор Gast 2AM-NRV) и систему управления на базе ПЛК Siemens S7-1200 с HMI-панелью KTP700.
         </p>
@@ -742,12 +764,12 @@ function Flow({ points, color, active, dur = 0.9, reverse = false, w = 4 }) {
 function Lamp({ x, y, on, color, label, blink }) {
   return (
     <g>
-      <circle cx={x} cy={y} r="10" fill={on ? color : "#162033"} stroke={on ? color : "#334155"} strokeWidth="1.5"
+      <circle cx={x} cy={y} r="10" fill={on ? color : "#e2e8f0"} stroke={on ? color : "#94a3b8"} strokeWidth="1.5"
         style={{
           filter: on ? `drop-shadow(0 0 7px ${color})` : "none",
           animation: on && blink ? "simblink 0.55s steps(1,end) infinite" : "none",
         }} />
-      <text x={x} y={y + 25} textAnchor="middle" fill="#94a3b8" fontSize="9" fontWeight="600">{label}</text>
+      <text x={x} y={y + 25} textAnchor="middle" fill={THEME.textMuted} fontSize="9" fontWeight="600">{label}</text>
     </g>
   );
 }
@@ -764,14 +786,14 @@ function Gauge({ cx, cy, r, value, max, danger, label }) {
   const [ex, ey] = arc(120);
   return (
     <g>
-      <circle cx={cx} cy={cy} r={r} fill="#0b1220" stroke={isDanger ? "#ef4444" : "#475569"} strokeWidth="1.5" />
+      <circle cx={cx} cy={cy} r={r} fill={THEME.gaugeFill} stroke={isDanger ? "#ef4444" : "#94a3b8"} strokeWidth="1.5" />
       {/* danger arc */}
       <path d={`M ${dx} ${dy} A ${r} ${r} 0 0 1 ${ex} ${ey}`} fill="none" stroke="#ef4444" strokeWidth="2" strokeOpacity="0.55" />
       <line x1={cx} y1={cy} x2={cx} y2={cy - r + 3}
         stroke={isDanger ? "#ef4444" : "#fbbf24"} strokeWidth="2" strokeLinecap="round"
         style={{ transform: `rotate(${ang}deg)`, transformOrigin: `${cx}px ${cy}px`, transition: "transform 0.4s ease-out" }} />
       <circle cx={cx} cy={cy} r="2.5" fill={isDanger ? "#ef4444" : "#fbbf24"} />
-      <text x={cx} y={cy + r + 12} textAnchor="middle" fill="#94a3b8" fontSize="9" fontWeight="600">{label}</text>
+      <text x={cx} y={cy + r + 12} textAnchor="middle" fill={THEME.textMuted} fontSize="9" fontWeight="600">{label}</text>
     </g>
   );
 }
@@ -780,9 +802,9 @@ function SimBtn({ active, onClick, color = "#38bdf8", children, danger }) {
   const c = danger ? "#ef4444" : color;
   return (
     <button onClick={onClick} style={{
-      flex: 1, minWidth: 0, background: active ? `${c}26` : "rgba(255,255,255,0.04)",
-      border: `1px solid ${active ? c : "rgba(255,255,255,0.1)"}`, borderRadius: 9,
-      padding: "9px 8px", color: active ? c : "#94a3b8", fontSize: 11.5, fontWeight: 700,
+      flex: 1, minWidth: 0, background: active ? `${c}18` : THEME.cardBg,
+      border: `1px solid ${active ? c : THEME.cardBorder}`, borderRadius: 9,
+      padding: "9px 8px", color: active ? c : THEME.textMuted, fontSize: 11.5, fontWeight: 700,
       cursor: "pointer", transition: "all 0.15s", letterSpacing: "0.01em",
     }}>{children}</button>
   );
@@ -792,8 +814,8 @@ function Slider({ label, value, onChange, min, max, step, unit, color = "#38bdf8
   return (
     <div style={{ marginBottom: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
-        <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 500 }}>{label}</span>
-        <span style={{ fontSize: 12, color, fontFamily: MONO, fontWeight: 700 }}>{value} <span style={{ color: "#64748b", fontSize: 10 }}>{unit}</span></span>
+        <span style={{ fontSize: 11, color: THEME.textMuted, fontWeight: 500 }}>{label}</span>
+        <span style={{ fontSize: 12, color, fontFamily: MONO, fontWeight: 700 }}>{value} <span style={{ color: THEME.textMuted, fontSize: 10 }}>{unit}</span></span>
       </div>
       <input type="range" min={min} max={max} step={step} value={value} onChange={e => onChange(parseFloat(e.target.value))}
         style={{ width: "100%", accentColor: color, cursor: "pointer" }} />
@@ -803,11 +825,11 @@ function Slider({ label, value, onChange, min, max, step, unit, color = "#38bdf8
 
 function StatusBar({ text, tone }) {
   const map = {
-    ok: { bg: "rgba(34,197,94,0.12)", bd: "#22c55e", fg: "#4ade80" },
-    move: { bg: "rgba(56,189,248,0.12)", bd: "#38bdf8", fg: "#7dd3fc" },
-    idle: { bg: "rgba(148,163,184,0.1)", bd: "#475569", fg: "#94a3b8" },
-    warn: { bg: "rgba(245,158,11,0.13)", bd: "#f59e0b", fg: "#fbbf24" },
-    alarm: { bg: "rgba(239,68,68,0.15)", bd: "#ef4444", fg: "#f87171" },
+    ok: { bg: "rgba(34,197,94,0.1)", bd: "#22c55e", fg: "#15803d" },
+    move: { bg: "rgba(37,99,235,0.08)", bd: "#2563eb", fg: "#1d4ed8" },
+    idle: { bg: "rgba(148,163,184,0.15)", bd: "#94a3b8", fg: "#475569" },
+    warn: { bg: "rgba(245,158,11,0.1)", bd: "#f59e0b", fg: "#b45309" },
+    alarm: { bg: "rgba(239,68,68,0.1)", bd: "#ef4444", fg: "#dc2626" },
   };
   const s = map[tone] || map.idle;
   return (
@@ -824,10 +846,10 @@ function StatusBar({ text, tone }) {
 
 function ReadRow({ label, value, unit, hi }) {
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-      <span style={{ fontSize: 11.5, color: "#94a3b8" }}>{label}</span>
-      <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 600, color: hi ? "#38bdf8" : "#e2e8f0" }}>
-        {value}<span style={{ fontSize: 10, color: "#64748b", marginLeft: 4 }}>{unit}</span>
+    <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: `1px solid ${THEME.borderLight}` }}>
+      <span style={{ fontSize: 11.5, color: THEME.textMuted }}>{label}</span>
+      <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 600, color: hi ? THEME.accentBright : THEME.text }}>
+        {value}<span style={{ fontSize: 10, color: THEME.textMuted, marginLeft: 4 }}>{unit}</span>
       </span>
     </div>
   );
@@ -899,7 +921,7 @@ function HydroSim() {
   return (
     <div>
       <SimStyles />
-      <svg viewBox="0 0 920 470" style={{ width: "100%", borderRadius: 14, background: "radial-gradient(circle at 60% 35%, #0d1730, #070c18)" }}>
+      <svg viewBox="0 0 920 470" style={{ width: "100%", borderRadius: 14, background: "radial-gradient(circle at 60% 35%, #e8f0fe, #f1f5f9)" }}>
         {/* ----- pipes / flows ----- */}
         {/* suction tank->pump */}
         <Flow points="77,360 77,274" color={feed} active={pressureActive} dur={flowDur} w={3} />
@@ -915,16 +937,16 @@ function HydroSim() {
         <Flow points="470,284 470,388 805,388 805,372" color={bColor} active={bActive} dur={flowDur} reverse={dir === "extend"} />
 
         {/* ----- TANK ----- */}
-        <rect x="30" y="360" width="95" height="80" rx="5" fill="#0e1a33" stroke="#3b82f6" strokeWidth="1.5" />
+        <rect x="30" y="360" width="95" height="80" rx="5" fill="#dbeafe" stroke="#3b82f6" strokeWidth="1.5" />
         <rect x="34" y={392} width="87" height="44" rx="3" fill="#1d4ed822" />
         <text x="77" y="430" textAnchor="middle" fill="#3b82f6" fontSize="11" fontWeight="700">Б</text>
         <text x="77" y="455" textAnchor="middle" fill="#64748b" fontSize="8">Бак 25 л · масло HLP-46</text>
 
         {/* ----- MOTOR + PUMP ----- */}
-        <rect x="37" y="180" width="80" height="30" rx="3" fill="#1e293b" stroke="#64748b" strokeWidth="1" />
+        <rect x="37" y="180" width="80" height="30" rx="3" fill="#f1f5f9" stroke="#64748b" strokeWidth="1" />
         <text x="77" y="199" textAnchor="middle" fill="#94a3b8" fontSize="9">М 1.5 кВт {pumpOn && !eStop ? "⟳" : "■"}</text>
         <line x1="77" y1="210" x2="77" y2="226" stroke="#64748b" strokeWidth="2" />
-        <circle cx="77" cy="250" r="24" fill="#0b1220" stroke={pumpOn && !eStop ? "#3b82f6" : "#475569"} strokeWidth="2"
+        <circle cx="77" cy="250" r="24" fill="#ffffff" stroke={pumpOn && !eStop ? "#3b82f6" : "#475569"} strokeWidth="2"
           style={{ filter: pumpOn && !eStop ? "drop-shadow(0 0 5px #3b82f6)" : "none" }} />
         <g style={{ transformOrigin: "77px 250px", animation: pumpOn && !eStop ? "simspin 0.7s linear infinite" : "none" }}>
           <path d="M77,234 L77,266 M61,250 L93,250 M66,239 L88,261 M88,239 L66,261" stroke={pumpOn && !eStop ? "#3b82f6" : "#475569"} strokeWidth="1.5" />
@@ -932,7 +954,7 @@ function HydroSim() {
         <text x="77" y="300" textAnchor="middle" fill="#38bdf8" fontSize="9" fontWeight="700">Н1 · НШ10Д</text>
 
         {/* ----- KP1 relief ----- */}
-        <rect x="140" y="150" width="40" height="56" rx="4" fill={reliefActive ? "#ef444422" : "#0b1220"} stroke={reliefActive ? "#ef4444" : "#64748b"} strokeWidth={reliefActive ? 2 : 1.2}
+        <rect x="140" y="150" width="40" height="56" rx="4" fill={reliefActive ? "#ef444422" : "#ffffff"} stroke={reliefActive ? "#ef4444" : "#64748b"} strokeWidth={reliefActive ? 2 : 1.2}
           style={{ filter: reliefActive ? "drop-shadow(0 0 6px #ef4444)" : "none" }} />
         <path d="M150,196 L170,160" stroke={reliefActive ? "#ef4444" : "#94a3b8"} strokeWidth="1.3" />
         <path d="M150,178 L160,168" stroke={reliefActive ? "#ef4444" : "#94a3b8"} strokeWidth="1.3" />
@@ -944,7 +966,7 @@ function HydroSim() {
         <Gauge cx={215} cy={175} r={17} value={pressureActive ? P : 0} max={10} danger={6.3} label="М1 · напор" />
 
         {/* ----- РМ1 flowmeter ----- */}
-        <rect x="250" y="232" width="46" height="36" rx="5" fill="#0b1220" stroke="#4ade80" strokeWidth="1.3" />
+        <rect x="250" y="232" width="46" height="36" rx="5" fill="#ffffff" stroke="#4ade80" strokeWidth="1.3" />
         <circle cx="273" cy="250" r="9" fill="none" stroke="#4ade80" strokeWidth="1"
           style={{ transformOrigin: "273px 250px", animation: moving || reliefActive ? `simspin ${flowDur}s linear infinite` : "none" }} />
         <path d="M273,243 L273,257 M266,250 L280,250" stroke="#4ade80" strokeWidth="1"
@@ -952,7 +974,7 @@ function HydroSim() {
         <text x="273" y="284" textAnchor="middle" fill="#4ade80" fontSize="8" fontWeight="600">РМ1</text>
 
         {/* ----- VALVE Р1 (4/3) ----- */}
-        <rect x="360" y="212" width="150" height="72" rx="7" fill="#0b1220" stroke="#f59e0b" strokeWidth="2" />
+        <rect x="360" y="212" width="150" height="72" rx="7" fill="#ffffff" stroke="#f59e0b" strokeWidth="2" />
         {/* three position cells */}
         <line x1="410" y1="212" x2="410" y2="284" stroke="#f59e0b" strokeWidth="1" strokeOpacity="0.4" />
         <line x1="460" y1="212" x2="460" y2="284" stroke="#f59e0b" strokeWidth="1" strokeOpacity="0.4" />
@@ -961,10 +983,10 @@ function HydroSim() {
           fill="#f59e0b" fillOpacity="0.14" />
         <text x="435" y="205" textAnchor="middle" fill="#f59e0b" fontSize="9" fontWeight="700">Р1 · Распределитель 4/3</text>
         {/* solenoids */}
-        <rect x="342" y="224" width="16" height="48" rx="2" fill={dir === "extend" && pumpOn && !eStop ? "#ef4444" : "#1e293b"} stroke="#ef4444" strokeWidth="1"
+        <rect x="342" y="224" width="16" height="48" rx="2" fill={dir === "extend" && pumpOn && !eStop ? "#ef4444" : "#f1f5f9"} stroke="#ef4444" strokeWidth="1"
           style={{ filter: dir === "extend" && pumpOn && !eStop ? "drop-shadow(0 0 5px #ef4444)" : "none" }} />
         <text x="350" y="305" textAnchor="middle" fill="#ef4444" fontSize="9" fontWeight="700">Y1</text>
-        <rect x="512" y="224" width="16" height="48" rx="2" fill={dir === "retract" && pumpOn && !eStop ? "#ef4444" : "#1e293b"} stroke="#ef4444" strokeWidth="1"
+        <rect x="512" y="224" width="16" height="48" rx="2" fill={dir === "retract" && pumpOn && !eStop ? "#ef4444" : "#f1f5f9"} stroke="#ef4444" strokeWidth="1"
           style={{ filter: dir === "retract" && pumpOn && !eStop ? "drop-shadow(0 0 5px #ef4444)" : "none" }} />
         <text x="520" y="305" textAnchor="middle" fill="#ef4444" fontSize="9" fontWeight="700">Y2</text>
         <text x="392" y="300" fill="#3b82f6" fontSize="9" fontWeight="700">A</text>
@@ -974,13 +996,13 @@ function HydroSim() {
         <Gauge cx={580} cy={175} r={17} value={moving || pressureActive ? P : 0} max={10} danger={6.3} label="М2 · нагрузка" />
 
         {/* ----- CYLINDER ----- */}
-        <rect x="625" y="300" width="215" height="72" rx="6" fill="#0a1426" stroke="#38bdf8" strokeWidth="2" />
+        <rect x="625" y="300" width="215" height="72" rx="6" fill="#e0f2fe" stroke="#38bdf8" strokeWidth="2" />
         {/* piston-side fill (left of plate) */}
         <rect x="630" y="305" width={Math.max(0, plate - 630)} height="62" fill="#3b82f6" fillOpacity={dir === "extend" && moving ? 0.32 : 0.12} />
         {/* rod-side fill (right of plate) */}
         <rect x={plate + 14} y="305" width={Math.max(0, cx1 - (plate + 14))} height="62" fill="#3b82f6" fillOpacity={dir === "retract" && moving ? 0.32 : 0.12} />
         {/* piston plate */}
-        <rect x={plate} y="305" width="14" height="62" rx="2" fill="#1e3a5f" stroke="#38bdf8" strokeWidth="1.5" />
+        <rect x={plate} y="305" width="14" height="62" rx="2" fill="#93c5fd" stroke="#38bdf8" strokeWidth="1.5" />
         {/* internal rod */}
         <line x1={plate + 14} y1="336" x2="836" y2="336" stroke="#64748b" strokeWidth="5" />
         {/* external rod */}
@@ -989,22 +1011,22 @@ function HydroSim() {
         <text x="732" y="360" textAnchor="middle" fill="#64748b" fontSize="8">ЦГ1 · 80/40 × 200</text>
         <text x="732" y="293" textAnchor="middle" fill="#38bdf8" fontSize="9" fontWeight="700">Гидроцилиндр · ход {Math.round(pos * 200)} мм</text>
         {/* end-switch markers */}
-        <circle cx="632" cy="290" r="4" fill={pos <= 0.001 ? "#22c55e" : "#1e293b"} stroke="#22c55e" strokeWidth="1" />
-        <circle cx="832" cy="290" r="4" fill={pos >= 0.999 ? "#22c55e" : "#1e293b"} stroke="#22c55e" strokeWidth="1" />
+        <circle cx="632" cy="290" r="4" fill={pos <= 0.001 ? "#22c55e" : "#f1f5f9"} stroke="#22c55e" strokeWidth="1" />
+        <circle cx="832" cy="290" r="4" fill={pos >= 0.999 ? "#22c55e" : "#f1f5f9"} stroke="#22c55e" strokeWidth="1" />
 
         {/* ----- ФС1 filter on return ----- */}
-        <rect x="92" y="200" width="36" height="16" rx="2" fill="#0b1220" stroke="#475569" strokeWidth="1" transform="rotate(0)" />
+        <rect x="92" y="200" width="36" height="16" rx="2" fill="#ffffff" stroke="#475569" strokeWidth="1" transform="rotate(0)" />
         <text x="110" y="234" textAnchor="middle" fill="#475569" fontSize="7">ФС1</text>
 
         {/* ----- ALARM PANEL (top-right) ----- */}
-        <rect x="700" y="120" width="195" height="120" rx="10" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+        <rect x="700" y="120" width="195" height="120" rx="10" fill="rgba(255,255,255,0.9)" stroke="rgba(15,23,42,0.1)" strokeWidth="1" />
         <text x="797" y="140" textAnchor="middle" fill="#64748b" fontSize="9" fontWeight="700">ПУЛЬТ / СИГНАЛИЗАЦИЯ</text>
         <Lamp x={740} y={170} on={pumpOn && !alarm} color="#22c55e" label="HL1 РАБОТА" />
         <Lamp x={810} y={170} on={alarm} color="#ef4444" label="HL2 АВАРИЯ" blink />
         {/* buzzer */}
         <g>
           {alarm && <circle cx={870} cy={170} r="11" fill="#ef4444" style={{ transformOrigin: "870px 170px", animation: "simpulse 1s ease-out infinite" }} />}
-          <circle cx={870} cy={170} r="8" fill={alarm ? "#ef4444" : "#162033"} stroke="#ef4444" strokeWidth="1.2" />
+          <circle cx={870} cy={170} r="8" fill={alarm ? "#ef4444" : "#e2e8f0"} stroke="#ef4444" strokeWidth="1.2" />
           <text x={870} y={195} textAnchor="middle" fill="#94a3b8" fontSize="9" fontWeight="600">НА1</text>
         </g>
         <text x="797" y="225" textAnchor="middle" fill={pumpOn && !eStop ? "#3b82f6" : "#475569"} fontSize="9">
@@ -1021,7 +1043,7 @@ function HydroSim() {
             {pumpOn ? "■ СТОП НАСОСА" : "▶ ПУСК НАСОСА Н1"}
           </SimBtn>
         </div>
-        <div style={{ fontSize: 10, color: "#64748b", marginBottom: 5, fontWeight: 600 }}>РАСПРЕДЕЛИТЕЛЬ Р1 (4/3)</div>
+        <div style={{ fontSize: 10, color: THEME.textMuted, marginBottom: 5, fontWeight: 600 }}>РАСПРЕДЕЛИТЕЛЬ Р1 (4/3)</div>
         <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
           <SimBtn active={dir === "retract"} color="#3b82f6" onClick={() => setDir("retract")}>◀ Y2 Втягивание</SimBtn>
           <SimBtn active={dir === "neutral"} color="#94a3b8" onClick={() => setDir("neutral")}>■ Нейтраль</SimBtn>
@@ -1116,7 +1138,7 @@ function PneuSim() {
   return (
     <div>
       <SimStyles />
-      <svg viewBox="0 0 920 470" style={{ width: "100%", borderRadius: 14, background: "radial-gradient(circle at 60% 35%, #06210f, #04140a)" }}>
+      <svg viewBox="0 0 920 470" style={{ width: "100%", borderRadius: 14, background: "radial-gradient(circle at 60% 35%, #dcfce7, #f0fdf4)" }}>
         {/* supply */}
         <Flow points="60,70 60,250 360,250" color={air} active={supplyActive} dur={flowDur} />
         {/* A line -> piston side (extend feed / exhaust) */}
@@ -1135,12 +1157,12 @@ function PneuSim() {
         {/* FRL block */}
         <rect x="100" y="170" width="190" height="100" rx="8" fill="none" stroke={air} strokeWidth="1" strokeDasharray="6 3" />
         <text x="195" y="186" textAnchor="middle" fill={air} fontSize="9" fontWeight="600">Блок подготовки воздуха (FRL)</text>
-        <rect x="115" y="200" width="44" height="56" rx="4" fill="#0b1f12" stroke="#4ade80" strokeWidth="1.3" />
+        <rect x="115" y="200" width="44" height="56" rx="4" fill="#ecfdf5" stroke="#4ade80" strokeWidth="1.3" />
         <text x="137" y="232" textAnchor="middle" fill="#4ade80" fontSize="8">ФВ1</text>
-        <rect x="170" y="200" width="44" height="56" rx="4" fill="#1f1503" stroke="#f59e0b" strokeWidth="1.3" />
+        <rect x="170" y="200" width="44" height="56" rx="4" fill="#fffbeb" stroke="#f59e0b" strokeWidth="1.3" />
         <text x="192" y="228" textAnchor="middle" fill="#f59e0b" fontSize="7">РД1</text>
         <text x="192" y="240" textAnchor="middle" fill="#64748b" fontSize="7">регул.</text>
-        <rect x="225" y="200" width="44" height="56" rx="4" fill="#1f1503" stroke="#f59e0b" strokeWidth="1.3" />
+        <rect x="225" y="200" width="44" height="56" rx="4" fill="#fffbeb" stroke="#f59e0b" strokeWidth="1.3" />
         <text x="247" y="232" textAnchor="middle" fill="#f59e0b" fontSize="7">Л1</text>
 
         {/* MН2 gauge */}
@@ -1148,12 +1170,12 @@ function PneuSim() {
         <line x1="335" y1="202" x2="335" y2="250" stroke="#fbbf24" strokeWidth="1" strokeOpacity="0.5" />
 
         {/* VALVE 5/2 */}
-        <rect x="360" y="222" width="130" height="78" rx="7" fill="#0b1f12" stroke="#f59e0b" strokeWidth="2" />
+        <rect x="360" y="222" width="130" height="78" rx="7" fill="#ecfdf5" stroke="#f59e0b" strokeWidth="2" />
         <line x1="425" y1="222" x2="425" y2="300" stroke="#f59e0b" strokeWidth="1" strokeOpacity="0.4" />
         <rect x={energized ? 360 : 425} y="222" width="65" height="78" fill="#f59e0b" fillOpacity="0.13" />
         <text x="425" y="215" textAnchor="middle" fill="#f59e0b" fontSize="9" fontWeight="700">ПР1 · 5/2 · SMC VZ3120</text>
         {/* solenoid Y3 */}
-        <rect x="342" y="234" width="16" height="54" rx="2" fill={energized && !eStop ? "#ef4444" : "#1e293b"} stroke="#ef4444" strokeWidth="1"
+        <rect x="342" y="234" width="16" height="54" rx="2" fill={energized && !eStop ? "#ef4444" : "#f1f5f9"} stroke="#ef4444" strokeWidth="1"
           style={{ filter: energized && !eStop ? "drop-shadow(0 0 5px #ef4444)" : "none" }} />
         <text x="350" y="312" textAnchor="middle" fill="#ef4444" fontSize="9" fontWeight="700">У3</text>
         {/* spring */}
@@ -1168,28 +1190,28 @@ function PneuSim() {
         <text x="450" y="360" textAnchor="middle" fill="#64748b" fontSize="7">Г2</text>
 
         {/* CYLINDER */}
-        <rect x="580" y="300" width="220" height="72" rx="6" fill="#08210f" stroke="#4ade80" strokeWidth="2" />
+        <rect x="580" y="300" width="220" height="72" rx="6" fill="#dcfce7" stroke="#4ade80" strokeWidth="2" />
         <rect x="585" y="305" width={Math.max(0, plate - 585)} height="62" fill="#22c55e" fillOpacity={dir === "extend" && moving ? 0.3 : 0.1} />
         <rect x={plate + 14} y="305" width={Math.max(0, cx1 - (plate + 14))} height="62" fill="#22c55e" fillOpacity={dir === "retract" && moving ? 0.3 : 0.1} />
-        <rect x={plate} y="305" width="14" height="62" rx="2" fill="#143d20" stroke="#4ade80" strokeWidth="1.5" />
+        <rect x={plate} y="305" width="14" height="62" rx="2" fill="#86efac" stroke="#4ade80" strokeWidth="1.5" />
         <line x1={plate + 14} y1="336" x2="804" y2="336" stroke="#64748b" strokeWidth="5" />
         <line x1="804" y1="336" x2={rodEnd} y2="336" stroke="#94a3b8" strokeWidth="6" strokeLinecap="round" />
         <circle cx={rodEnd} cy="336" r="6" fill="#4ade80" />
         <text x="690" y="293" textAnchor="middle" fill="#4ade80" fontSize="9" fontWeight="700">Festo DSBC-50-200 · ход {Math.round(pos * 200)} мм</text>
         {/* end switches KB1 / KB2 */}
-        <rect x="572" y="328" width="20" height="18" rx="2" fill={pos <= 0.001 ? "#22c55e44" : "#1e293b"} stroke="#22c55e" strokeWidth="1" />
+        <rect x="572" y="328" width="20" height="18" rx="2" fill={pos <= 0.001 ? "#22c55e44" : "#f1f5f9"} stroke="#22c55e" strokeWidth="1" />
         <text x="582" y="341" textAnchor="middle" fill="#22c55e" fontSize="7" fontWeight="700">КВ1</text>
-        <rect x="800" y="328" width="20" height="18" rx="2" fill={pos >= 0.999 ? "#22c55e44" : "#1e293b"} stroke="#22c55e" strokeWidth="1" />
+        <rect x="800" y="328" width="20" height="18" rx="2" fill={pos >= 0.999 ? "#22c55e44" : "#f1f5f9"} stroke="#22c55e" strokeWidth="1" />
         <text x="810" y="341" textAnchor="middle" fill="#22c55e" fontSize="7" fontWeight="700">КВ2</text>
 
         {/* ALARM panel */}
-        <rect x="660" y="120" width="235" height="120" rx="10" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+        <rect x="660" y="120" width="235" height="120" rx="10" fill="rgba(255,255,255,0.9)" stroke="rgba(15,23,42,0.1)" strokeWidth="1" />
         <text x="777" y="140" textAnchor="middle" fill="#64748b" fontSize="9" fontWeight="700">ПУЛЬТ / СИГНАЛИЗАЦИЯ</text>
         <Lamp x={710} y={170} on={airOn && !alarm && !lowP} color="#22c55e" label="HL1 РАБОТА" />
         <Lamp x={777} y={170} on={alarm || (airOn && lowP)} color={alarm ? "#ef4444" : "#f59e0b"} label={alarm ? "HL2 АВАРИЯ" : "HL3 ДАВЛ."} blink={alarm} />
         <g>
           {alarm && <circle cx={845} cy={170} r="11" fill="#ef4444" style={{ transformOrigin: "845px 170px", animation: "simpulse 1s ease-out infinite" }} />}
-          <circle cx={845} cy={170} r="8" fill={alarm ? "#ef4444" : "#162033"} stroke="#ef4444" strokeWidth="1.2" />
+          <circle cx={845} cy={170} r="8" fill={alarm ? "#ef4444" : "#e2e8f0"} stroke="#ef4444" strokeWidth="1.2" />
           <text x={845} y={195} textAnchor="middle" fill="#94a3b8" fontSize="9" fontWeight="600">НА1</text>
         </g>
         <text x="777" y="225" textAnchor="middle" fill={air} fontSize="9">
@@ -1205,7 +1227,7 @@ function PneuSim() {
             {airOn ? "■ ПЕРЕКРЫТЬ ВОЗДУХ" : "▶ ПОДАТЬ ВОЗДУХ"}
           </SimBtn>
         </div>
-        <div style={{ fontSize: 10, color: "#64748b", marginBottom: 5, fontWeight: 600 }}>СОЛЕНОИД У3 — ПНЕВМОРАСПРЕДЕЛИТЕЛЬ 5/2</div>
+        <div style={{ fontSize: 10, color: THEME.textMuted, marginBottom: 5, fontWeight: 600 }}>СОЛЕНОИД У3 — ПНЕВМОРАСПРЕДЕЛИТЕЛЬ 5/2</div>
         <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
           <SimBtn active={!energized} color="#94a3b8" onClick={() => setEnergized(false)}>◀ OFF · пружина (втягивание)</SimBtn>
           <SimBtn active={energized} color="#22c55e" onClick={() => setEnergized(true)}>ON · выдвижение ▶</SimBtn>
@@ -1266,9 +1288,9 @@ function CalcPage() {
       <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 16 }}>
         {CALC_TABS.map(t => (
           <button key={t.id} onClick={() => setCt(t.id)} style={{
-            background: ct===t.id ? "rgba(56,189,248,0.2)" : "rgba(255,255,255,0.04)",
-            border: ct===t.id ? "1px solid rgba(56,189,248,0.4)" : "1px solid rgba(255,255,255,0.08)",
-            borderRadius: 8, padding: "7px 12px", color: ct===t.id ? "#38bdf8" : "#94a3b8",
+            background: ct===t.id ? "rgba(37,99,235,0.1)" : THEME.cardBg,
+            border: ct===t.id ? "1px solid rgba(37,99,235,0.3)" : `1px solid ${THEME.cardBorder}`,
+            borderRadius: 8, padding: "7px 12px", color: ct===t.id ? THEME.accentBright : THEME.textMuted,
             fontSize: 11, fontWeight: 600, cursor: "pointer",
           }}>{t.label}</button>
         ))}
@@ -1304,24 +1326,24 @@ export default function App() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "linear-gradient(160deg, #0c1222, #111827, #0f172a)",
-      color: "#e2e8f0", fontFamily: FONT,
+      background: THEME.bg,
+      color: THEME.text, fontFamily: FONT,
     }}>
       <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 
       {/* Header */}
       <div style={{
-        background: "linear-gradient(135deg, rgba(37,99,235,0.12), rgba(22,163,106,0.08))",
-        borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "18px 16px", textAlign: "center",
+        background: "linear-gradient(135deg, rgba(37,99,235,0.08), rgba(22,163,106,0.06))",
+        borderBottom: `1px solid ${THEME.border}`, padding: "18px 16px", textAlign: "center",
       }}>
-        <div style={{ fontSize: 10, letterSpacing: "0.15em", color: "#64748b", textTransform: "uppercase" }}>
+        <div style={{ fontSize: 10, letterSpacing: "0.15em", color: THEME.textMuted, textTransform: "uppercase" }}>
           Лабораторный стенд • Гидравлические и пневматические системы
         </div>
         <h1 style={{
           margin: "6px 0 4px", fontSize: 20, fontWeight: 700,
-          background: "linear-gradient(135deg, #38bdf8, #4ade80)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+          background: "linear-gradient(135deg, #0284c7, #16a34a)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
         }}>Инженерный калькулятор</h1>
-        <div style={{ fontSize: 10, color: "#475569" }}>
+        <div style={{ fontSize: 10, color: THEME.textMuted }}>
           ГОСТ 2.701-2008 / ISO 1219 • Siemens S7-1200 • TIA Portal V18
         </div>
       </div>
@@ -1329,15 +1351,16 @@ export default function App() {
       {/* Navigation */}
       <div style={{
         display: "flex", gap: 4, padding: "10px 12px", justifyContent: "center",
-        borderBottom: "1px solid rgba(255,255,255,0.05)", flexWrap: "wrap",
+        borderBottom: `1px solid ${THEME.borderLight}`, flexWrap: "wrap",
+        background: "rgba(255,255,255,0.5)",
       }}>
         {MAIN_TABS.map(t => (
           <button key={t.id} onClick={() => setTab(t.id)} style={{
             background: tab === t.id
-              ? "linear-gradient(135deg, rgba(37,99,235,0.25), rgba(56,189,248,0.15))"
-              : "rgba(255,255,255,0.03)",
-            border: tab === t.id ? "1px solid rgba(56,189,248,0.3)" : "1px solid rgba(255,255,255,0.06)",
-            borderRadius: 10, padding: "8px 14px", color: tab === t.id ? "#38bdf8" : "#94a3b8",
+              ? "linear-gradient(135deg, rgba(37,99,235,0.12), rgba(56,189,248,0.08))"
+              : THEME.cardBg,
+            border: tab === t.id ? "1px solid rgba(37,99,235,0.25)" : `1px solid ${THEME.cardBorder}`,
+            borderRadius: 10, padding: "8px 14px", color: tab === t.id ? THEME.accentBright : THEME.textMuted,
             fontSize: 12, fontWeight: 600, cursor: "pointer", transition: "all 0.2s",
           }}>
             <span style={{ marginRight: 4 }}>{t.icon}</span>{t.label}
@@ -1349,9 +1372,9 @@ export default function App() {
       <div style={{ padding: "16px 14px", maxWidth: 640, margin: "0 auto" }}>
         <Page />
         <div style={{
-          marginTop: 24, padding: "12px 16px", background: "rgba(255,255,255,0.02)",
-          borderRadius: 10, border: "1px solid rgba(255,255,255,0.04)",
-          fontSize: 10, color: "#475569", lineHeight: 1.5, textAlign: "center",
+          marginTop: 24, padding: "12px 16px", background: THEME.footerBg,
+          borderRadius: 10, border: `1px solid ${THEME.borderLight}`,
+          fontSize: 10, color: THEME.textMuted, lineHeight: 1.5, textAlign: "center",
         }}>
           ЛС-ГС-2025 • 6В07119 «Технологические машины и оборудование» •
           АО «КазУТБ им. К. Кулажанова»

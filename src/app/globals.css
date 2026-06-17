@@ -1,6 +1,6 @@
 :root {
-  --background: #243044;
-  --foreground: #e2e8f0;
+  --background: #f1f5f9;
+  --foreground: #1e293b;
 }
 
 html {
@@ -36,5 +36,5 @@ a {
 }
 
 html {
-  color-scheme: dark;
+  color-scheme: light;
 }
